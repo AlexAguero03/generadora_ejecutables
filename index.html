@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Generador de Ejecutables para Abrir Enlaces</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="card">
+        <div class="header">
+          <h1>Generador de Ejecutables para Abrir Enlaces</h1>
+          <div class="stack">
+            <span class="badge ok">Seguro por diseño</span>
+            <span class="badge warn">Evita antivirus falsos positivos</span>
+          </div>
+        </div>
+
+        <div class="content">
+          <p class="muted">
+            Escribe uno o varios enlaces (uno por línea). Elige el formato de
+            salida según el sistema operativo. Se crearán archivos que, al
+            ejecutarse, abrirán los enlaces en el navegador predeterminado.
+          </p>
+
+          <label for="urls">Enlaces (uno por línea)</label>
+          <textarea
+            id="urls"
+            class="dropzone"
+            placeholder="https://example.com
+https://otra-pagina.mx"
+          ></textarea>
+          <div class="hint small">
+            Puedes <b>arrastrar y soltar</b> un archivo <b>TXT/CSV</b> aquí, o
+            usar Importar.
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="filename"
+                >Nombre base del archivo (sin extensión)</label
+              >
+              <input id="filename" placeholder="AbrirEnlaces" />
+            </div>
+            <div>
+              <label for="delay">Retraso entre enlaces (ms, opcional)</label>
+              <input
+                id="delay"
+                type="number"
+                min="0"
+                step="100"
+                placeholder="0"
+              />
+            </div>
+          </div>
+
+          <!-- Importar / Exportar -->
+          <div class="btns">
+            <button onclick="triggerImport()">Importar TXT/CSV</button>
+            <button onclick="exportTXT()">Exportar TXT</button>
+            <button onclick="exportCSV()">Exportar CSV</button>
+            <button class="ghost" onclick="clearURLs()">Limpiar</button>
+            <input
+              id="importFile"
+              type="file"
+              accept=".txt,.csv"
+              style="display: none"
+              onchange="importFromFile(event)"
+            />
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="grid">
+            <div class="tile">
+              <strong>Windows (.url) – atajo de Internet</strong>
+              <p class="hint">
+                Muy poco probable que lo marque el antivirus. Solo admite
+                <b>un</b> enlace.
+              </p>
+              <div class="btns">
+                <button onclick="buildURLShortcut()">Descargar .url</button>
+              </div>
+            </div>
+
+            <div class="tile">
+              <strong>Windows (.bat) – lote</strong>
+              <p class="hint">
+                Abre uno o varios enlaces con <code>start</code>. Puede mostrar
+                ventana de consola.
+              </p>
+              <div class="btns">
+                <button onclick="buildBAT()">Descargar .bat</button>
+              </div>
+            </div>
+
+            <div class="tile">
+              <strong>Windows (.vbs) – sin ventana</strong>
+              <p class="hint">
+                Ejecuta en segundo plano. Suele evitar la ventana negra.
+              </p>
+              <div class="btns">
+                <button onclick="buildVBS()">Descargar .vbs</button>
+              </div>
+            </div>
+
+            <div class="tile">
+              <strong>Windows PowerShell (.ps1)</strong>
+              <p class="hint">
+                Usa <code>Start-Process</code>. Requiere política de ejecución
+                permitida.
+              </p>
+              <div class="btns">
+                <button onclick="buildPS1()">Descargar .ps1</button>
+              </div>
+            </div>
+
+            <div class="tile">
+              <strong>macOS (.command)</strong>
+              <p class="hint">
+                Script clicable que usa <code>open</code>. Marcar como
+                ejecutable.
+              </p>
+              <div class="btns">
+                <button onclick="buildCommand()">Descargar .command</button>
+              </div>
+            </div>
+
+            <div class="tile">
+              <strong>Linux (.sh)</strong>
+              <p class="hint">
+                Script para <code>xdg-open</code>. Dar permisos con
+                <code>chmod +x</code>.
+              </p>
+              <div class="btns">
+                <button onclick="buildSH()">Descargar .sh</button>
+              </div>
+            </div>
+
+            <div class="tile">
+              <strong>Linux (.desktop)</strong>
+              <p class="hint">
+                Lanzador gráfico estándar (GNOME/KDE). Doble clic tras guardar.
+              </p>
+              <div class="btns">
+                <button onclick="buildDESKTOP()">Descargar .desktop</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+          <div class="small muted">
+            <p>
+              <b>Nota sobre antivirus:</b> Los formatos
+              <span class="badge ok">.url</span> y
+              <span class="badge ok">.desktop/.command/.sh</span> suelen ser más
+              confiables que los ejecutables empaquetados. Si necesitas un
+              <b>.exe</b> real, compílalo en tu equipo (por ejemplo, con
+              PyInstaller) en lugar de descargar un .exe desde la web.
+            </p>
+          </div>
+        </div>
+
+        <div class="footer">
+          Hecho para automatizar aperturas de enlaces en múltiples equipos
+          (laboratorio, aula, etc.). Ingresas los links, descargas el lanzador y
+          lo distribuyes.
+        </div>
+      </div>
+    </div>
+
+    <script src="scripts.js"></script>
+    <script>
+      // Inicializa Drag & Drop cuando cargue el documento
+      document.addEventListener("DOMContentLoaded", setupDragAndDrop);
+    </script>
+  </body>
+</html>
